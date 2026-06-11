@@ -58,6 +58,7 @@ header .dept{font-size:11px;margin-top:4px;opacity:.55;letter-spacing:.3px}
 .t-meta{font-size:12px;color:#666;margin-top:5px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .t-ddl{display:inline-block;background:#f5f5f5;color:#333;font-weight:600;padding:1px 8px;border-radius:4px;font-size:11px}
 .t-ddl.warn{background:#ffebee;color:#c62828}
+.t-hidden{display:none}
 
 /* Competition Cards */
 .cm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
@@ -122,7 +123,6 @@ header .dept{font-size:11px;margin-top:4px;opacity:.55;letter-spacing:.3px}
   <div class="hd-in">
     <h1>应用产品部 · 开放平台</h1>
     <div class="slogan">信息同步 · 协同高效 · 共建共享</div>
-    <div class="dept">支付业务部 应用产品部</div>
   </div>
 </header>
 
@@ -139,7 +139,10 @@ header .dept{font-size:11px;margin-top:4px;opacity:.55;letter-spacing:.3px}
       <div class="n-list" id="newsList"></div>
     </div>
     <div class="top-right">
-      <div class="col-hd">📋 重点待办</div>
+      <div class="col-hd">
+        📋 重点待办
+        <span class="tip" id="todoToggle">展开全部 ▾</span>
+      </div>
       <div class="t-list" id="todoList"></div>
     </div>
   </div>
@@ -153,11 +156,11 @@ header .dept{font-size:11px;margin-top:4px;opacity:.55;letter-spacing:.3px}
   </div>
 </div>
 
-<!-- AI 知识库 -->
+<!-- AI 培训 -->
 <div class="sec">
-  <div class="sec-hd">📚 AI 知识库</div>
+  <div class="sec-hd">📚 AI 培训</div>
   <div class="sec-bd">
-    <div class="kb-grid" id="kbList"></div>
+    <div class="kb-grid" id="trainList"></div>
   </div>
 </div>
 
@@ -187,38 +190,30 @@ var NEWS = [
   {title:"【探秘AI眼镜】雷鸟V4携手京东推出反向定制众筹：38 克AI眼镜靠1:1大底传感器出圈",url:"https://mp.weixin.qq.com/s/gsPSIrq8MSO9O9wvvPh4Ow"}
 ];
 
-// 2. 重点待办（自动按 DDL 升序排列；过期项不显示。日期格式：YYYY-MM-DD）
+// 2. 重点待办（自动按 DDL 升序排列；过期项不显示。日期格式：YYYY-MM-DD 或文本如"每周五10:00"）
+//    数据源：/Users/gulili6/Documents/个人/AI操作/部门平台数据源.xlsx → 「重点待办」sheet
 var TODOS = [
-  {title:"支付产品部产品及重点项目周同步",ddl:"2026-06-12",url:"https://joyspace.jd.com/sheets/B56cENZT8ExbIDdQ9jiY"},
-  {title:"【金科微创新】项目登记",ddl:"2026-06-14",url:"https://joyspace.jd.com/sheets/mkZFSFWklEe2124I9NmJ"},
-  {title:"5 月必赢之战季度更新",ddl:"2026-06-20",url:"https://joyspace.jd.com/sheets/7c1aZyhH5rRwBAA1a2Vg"},
-  {title:"季度 OKR 复盘材料提交",ddl:"2026-06-30",url:"https://joyspace.jd.com/"}
+  {title:"周例会进度更新",ddl:"每周五 10:00",url:"https://joyspace.jd.com/sheets/B56cENZT8ExbIDdQ9jiY"},
+  {title:"金科微创新项目登记",ddl:"2026-06-14",url:"https://joyspace.jd.com/sheets/mkZFSFWklEe2124I9NmJ"},
+  {title:"必赢之战更新",ddl:"2026-06-20",url:"https://joyspace.jd.com/sheets/7abxTfFp3NT2MAciMeCq"}
 ];
 
 // 3. AI 比赛专区
+//    数据源：「AI赛事」sheet —— 列：赛事名称 | 报名截止 | 链接 | 状态
 var COMPS = [
-  {title:"【玩转AI】支付AI应用大赛",date:"2026/05/28 ~ 2026/06/26",desc:"以赛选人、以赛促用，沉淀可复用、可推广的 AI 实践成果。",url:"https://joyspace.jd.com/pages/7JzQ6ohK3N9CJUMD0jSe",status:"报名中"},
-  {title:"京东科技创新火花 · AI 赋能大赛",date:"长期赛事",desc:"通过 AI 赋能大赛形式，沉淀 AI 实践成果。",url:"https://joyspace.jd.com/",status:"报名中"},
-  {title:"JoyAI Vibe Coding 创意大赛",date:"2026 全年",desc:"以 AI 编程为主题，鼓励开发者创意碰撞。",url:"https://joyspace.jd.com/",status:"进行中"}
+  {title:"【支付AI】玩转AI应用大赛",deadline:"2026-06-18 22:00",url:"https://get.jd.com/#/survey/index?id=1012576054698704&erp=type",status:"报名中"}
 ];
 
-// 4. AI 知识库
-var KBS = [
-  {ic:"📦",title:"基础产品部 AI 项目合集",desc:"各团队 AI 落地成果与项目进展汇总。",url:"https://joyspace.jd.com/"},
-  {ic:"📖",title:"AI 案例库",desc:"AI 工具入门、运营提效实践、案例汇总。",url:"https://joyspace.jd.com/"},
-  {ic:"📊",title:"AI 工具实践手册",desc:"AI 编码、数据分析、自动化方法与案例。",url:"https://joyspace.jd.com/"}
+// 4. AI 培训
+//    数据源：「AI培训」sheet —— 列：培训名称 | 培训时间 | 培训链接 | 培训文档 | 培训人
+var TRAININGS = [
+  {title:"AI实战班-写好你的skill",time:"2026-06-11 20:00～21:00",liveUrl:"https://jd.cn/1-07yc6R",docUrl:"https://joyspace.jd.com/pages/1sozIsMLxojmWaYzU6Z6?source=joyday",lecturer:"白洋"}
 ];
 
 // 5. 工具集锦
+//    数据源：「工具集锦」sheet —— 列：工具名称 | 下载地址 | 使用手册
 var TOOLS = [
-  {ic:"⚡",title:"ZERO 平台",desc:"内部 AI 工作平台，统一管理智能体和工作流。",download:"https://joyspace.jd.com/",manual:"https://joyspace.jd.com/pages/ib6pKpr59W27CFZf0Cx8"},
-  {ic:"🤖",title:"JoyClaw",desc:"自动化执行助手，可批量处理网页任务。",download:"https://joyspace.jd.com/",manual:"https://joyspace.jd.com/"},
-  {ic:"💻",title:"JoyCode",desc:"AI 辅助编码工具，支持多种 IDE 集成。",download:"https://joyspace.jd.com/",manual:"https://joyspace.jd.com/"},
-  {ic:"📝",title:"慧记",desc:"AI 会议记录，自动生成纪要与待办。",download:"https://joyspace.jd.com/",manual:"https://joyspace.jd.com/"},
-  {ic:"🎨",title:"京点点",desc:"AI 视频/图像生成工具。",download:"https://joyspace.jd.com/",manual:"https://joyspace.jd.com/"},
-  {ic:"🔍",title:"小叮当",desc:"人群特征分析与数据查询助手。",download:"https://joyspace.jd.com/",manual:"https://joyspace.jd.com/"},
-  {ic:"📊",title:"CDP 查询助手",desc:"客户数据平台快速查询工具。",download:"https://joyspace.jd.com/",manual:"https://joyspace.jd.com/"},
-  {ic:"🚀",title:"JoyAgent",desc:"商务拜访、客户管理智能体。",download:"https://joyspace.jd.com/",manual:"https://joyspace.jd.com/"}
+  {title:"ZERO",download:"https://0.jd.com/",manual:"https://joyspace.jd.com/pages/ib6pKpr59W27CFZf0Cx8"}
 ];
 
 /* ============================================================
@@ -255,28 +250,62 @@ else{
   });
 }
 
-// ── 重点待办（DDL 升序，过期不显示）──
+// ── 重点待办（DDL 升序，过期不显示；兼容文本型 DDL 如"每周五10:00"）──
+function parseDdl(s){
+  if(!s) return null;
+  var m = String(s).match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if(!m) return null; // 文本型（如"每周五10:00"）→ 不参与日期排序/过期过滤
+  return (+m[1])*10000 + (+m[2])*100 + (+m[3]);
+}
 var todoData = TODOS.map(function(t){
-    var p = (t.ddl||'').split('-');
-    return Object.assign({},t,{ddlNum: p.length===3 ? (+p[0])*10000 + (+p[1])*100 + (+p[2]) : 99999999});
+    return Object.assign({},t,{ddlNum: parseDdl(t.ddl)});
   })
-  .filter(function(t){ return t.ddlNum >= todayNum; })
-  .sort(function(a,b){ return a.ddlNum - b.ddlNum; });
+  .filter(function(t){ return t.ddlNum===null || t.ddlNum >= todayNum; })
+  .sort(function(a,b){
+    // 文本型（ddlNum===null）排在最后；其余按日期升序
+    if(a.ddlNum===null && b.ddlNum===null) return 0;
+    if(a.ddlNum===null) return 1;
+    if(b.ddlNum===null) return -1;
+    return a.ddlNum - b.ddlNum;
+  });
 
-document.getElementById('todoList').innerHTML = todoData.length ? todoData.map(function(t){
-  var diff = Math.floor((Date.UTC(+t.ddl.split('-')[0],+t.ddl.split('-')[1]-1,+t.ddl.split('-')[2]) - Date.UTC(now.getFullYear(),now.getMonth(),now.getDate()))/86400000);
-  var cls,label,ddlCls;
-  if(diff<=2){ cls='urgent'; label='紧急'; ddlCls='warn'; }
-  else if(diff<=7){ cls='zhong'; label='进行中'; ddlCls=''; }
-  else { cls='normal'; label='常规'; ddlCls=''; }
-  var diffTxt = diff===0 ? '今天' : (diff===1 ? '明天' : '剩'+diff+'天');
-  return '<div class="t-item">' +
+document.getElementById('todoList').innerHTML = todoData.length ? todoData.map(function(t,idx){
+  var cls,label,ddlCls,ddlText;
+  if(t.ddlNum===null){
+    // 文本型 DDL：周期性事件
+    cls='zhong'; label='周期'; ddlCls='';
+    ddlText = '⏰ ' + esc(t.ddl);
+  } else {
+    var diff = Math.floor((Date.UTC(Math.floor(t.ddlNum/10000), Math.floor(t.ddlNum/100)%100-1, t.ddlNum%100) - Date.UTC(now.getFullYear(),now.getMonth(),now.getDate()))/86400000);
+    if(diff<=2){ cls='urgent'; label='紧急'; ddlCls='warn'; }
+    else if(diff<=7){ cls='zhong'; label='进行中'; ddlCls=''; }
+    else { cls='normal'; label='常规'; ddlCls=''; }
+    var diffTxt = diff===0 ? '今天' : (diff===1 ? '明天' : '剩'+diff+'天');
+    ddlText = '⏰ ' + esc(t.ddl) + '（' + diffTxt + '）';
+  }
+  var hidden = idx >= 3 ? ' t-hidden' : '';
+  return '<div class="t-item'+hidden+'">' +
          '<span class="t-bdg '+cls+'">'+label+'</span>' +
          '<div class="t-body">' +
            '<div class="t-tit"><a href="'+esc(t.url)+'" target="_blank">'+esc(t.title)+'</a></div>' +
-           '<div class="t-meta"><span class="t-ddl '+ddlCls+'">⏰ '+esc(t.ddl)+'（'+diffTxt+'）</span></div>' +
+           '<div class="t-meta"><span class="t-ddl '+ddlCls+'">'+ddlText+'</span></div>' +
          '</div></div>';
 }).join('') : '<div style="font-size:13px;color:#bbb;text-align:center;padding:16px 0">暂无待办 ✨</div>';
+
+// 待办展开/收起
+var todoToggleEl = document.getElementById('todoToggle');
+if(todoData.length<=3){ todoToggleEl.style.display='none'; }
+else{
+  var todoExpanded = false;
+  todoToggleEl.addEventListener('click', function(){
+    todoExpanded = !todoExpanded;
+    var items = document.querySelectorAll('#todoList .t-item');
+    items.forEach(function(el,i){
+      if(i>=3) el.classList.toggle('t-hidden', !todoExpanded);
+    });
+    todoToggleEl.textContent = todoExpanded ? '收起 ▴' : '展开全部 ▾';
+  });
+}
 
 // ── AI 比赛专区 ──
 document.getElementById('compList').innerHTML = COMPS.map(function(c){
@@ -285,26 +314,28 @@ document.getElementById('compList').innerHTML = COMPS.map(function(c){
          '<div class="cm-bar"></div>' +
          '<div class="cm-in">' +
            '<div class="cm-hd"><div class="cm-tit">'+esc(c.title)+'</div><span class="cm-bdg '+cls+'">'+esc(c.status)+'</span></div>' +
-           '<div class="cm-date">📅 '+esc(c.date)+'</div>' +
-           '<div class="cm-desc">'+esc(c.desc)+'</div>' +
+           '<div class="cm-date">⏰ 报名截止：'+esc(c.deadline)+'</div>' +
          '</div></a>';
 }).join('');
 
-// ── AI 知识库 ──
-document.getElementById('kbList').innerHTML = KBS.map(function(k){
-  return '<a class="kb-card" href="'+esc(k.url)+'" target="_blank">' +
-         '<div class="kb-ic">'+k.ic+'</div>' +
-         '<div class="kb-tit">'+esc(k.title)+'</div>' +
-         '<div class="kb-desc">'+esc(k.desc)+'</div></a>';
+// ── AI 培训 ──
+document.getElementById('trainList').innerHTML = TRAININGS.map(function(t){
+  var liveLk = t.liveUrl ? '<a class="tl-lk" href="'+esc(t.liveUrl)+'" target="_blank">直播链接</a>' : '';
+  var docLk  = t.docUrl  ? '<a class="tl-lk alt" href="'+esc(t.docUrl)+'" target="_blank">培训文档</a>' : '';
+  return '<div class="kb-card" style="cursor:default">' +
+         '<div class="kb-ic">📖</div>' +
+         '<div class="kb-tit">'+esc(t.title)+'</div>' +
+         '<div class="kb-desc">⏰ '+esc(t.time)+(t.lecturer?'　·　主讲：'+esc(t.lecturer):'')+'</div>' +
+         '<div class="tl-lks" style="margin-top:6px">'+liveLk+docLk+'</div>' +
+         '</div>';
 }).join('');
 
 // ── 工具集锦 ──
 document.getElementById('toolList').innerHTML = TOOLS.map(function(t){
-  var dl = t.download ? '<a class="tl-lk" href="'+esc(t.download)+'" target="_blank">下载</a>' : '';
+  var dl = t.download ? '<a class="tl-lk" href="'+esc(t.download)+'" target="_blank">下载地址</a>' : '';
   var mn = t.manual ? '<a class="tl-lk alt" href="'+esc(t.manual)+'" target="_blank">使用手册</a>' : '';
   return '<div class="tl-card">' +
-         '<div class="tl-hd"><div class="tl-ic">'+t.ic+'</div><div class="tl-tit">'+esc(t.title)+'</div></div>' +
-         '<div class="tl-desc">'+esc(t.desc)+'</div>' +
+         '<div class="tl-hd"><div class="tl-ic">🛠️</div><div class="tl-tit">'+esc(t.title)+'</div></div>' +
          '<div class="tl-lks">'+dl+mn+'</div>' +
          '</div>';
 }).join('');
