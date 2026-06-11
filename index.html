@@ -35,12 +35,12 @@ header .dept{font-size:11px;margin-top:4px;opacity:.55;letter-spacing:.3px}
 
 /* News */
 .n-list{display:flex;flex-direction:column;gap:10px}
-.n-item{display:block;padding:12px 14px;border-radius:8px;border:1px solid #f0f0f0;color:inherit;background:#fafbfc;transition:all .2s}
+.n-item{display:flex;gap:12px;align-items:center;padding:12px 14px;border-radius:8px;border:1px solid #f0f0f0;color:inherit;background:#fafbfc;transition:all .2s}
 .n-item:hover{border-color:#e4393c;background:#fffafa}
-.n-meta{display:flex;align-items:center;gap:8px;margin-bottom:4px}
-.n-tag{font-size:11px;background:#fff0f0;color:#e4393c;padding:2px 8px;border-radius:10px;font-weight:600}
+.n-main{flex:1;min-width:0}
+.n-tag{font-size:11px;background:#fff0f0;color:#e4393c;padding:3px 10px;border-radius:10px;font-weight:600;white-space:nowrap;flex-shrink:0}
 .n-rank{font-size:11px;color:#999}
-.n-title{font-size:14px;font-weight:600;color:#222;margin-bottom:2px;line-height:1.5}
+.n-title{font-size:14px;font-weight:600;color:#222;margin-bottom:3px;line-height:1.5}
 .n-desc{font-size:12px;color:#666;line-height:1.6}
 .n-hidden{display:none}
 
@@ -206,14 +206,19 @@ var COMPS = [
 
 // 4. AI 培训
 //    数据源：「AI培训」sheet —— 列：培训名称 | 培训时间 | 培训链接 | 培训文档 | 培训人
+//    备注：培训链接可以是 URL（直播链接）或文本（线下会议室地址）
 var TRAININGS = [
-  {title:"AI实战班-写好你的skill",time:"2026-06-11 20:00～21:00",liveUrl:"https://jd.cn/1-07yc6R",docUrl:"https://joyspace.jd.com/pages/1sozIsMLxojmWaYzU6Z6?source=joyday",lecturer:"白洋"}
+  {title:"AI实战班-写好你的skill",time:"2026-06-11 20:00～21:00",liveUrl:"https://jd.cn/1-07yc6R",docUrl:"https://joyspace.jd.com/pages/1sozIsMLxojmWaYzU6Z6?source=joyday",lecturer:"白洋"},
+  {title:"【AI转型产品通道培训】手把手教你手搓skill",time:"2026-06-12 18:00～19:00",liveUrl:"京东总部2号楼A座18F北塔-深圳会议室",docUrl:"https://joyspace.jd.com/pages/8Dg3yIJSemb8xu6X25Fq",lecturer:"王嘉怡"}
 ];
 
 // 5. 工具集锦
 //    数据源：「工具集锦」sheet —— 列：工具名称 | 下载地址 | 使用手册
 var TOOLS = [
-  {title:"ZERO",download:"https://0.jd.com/",manual:"https://joyspace.jd.com/pages/ib6pKpr59W27CFZf0Cx8"}
+  {title:"Claude Code",download:"http://pan.jd.com/sharedInfo/38D9F2CFB1A5104CDE9069DFB1C61C77",manual:"https://joyspace.jd.com/pages/V1Dn6vtJCDi19V0j3D4u"},
+  {title:"ZERO",download:"https://0.jd.com/",manual:"https://joyspace.jd.com/pages/ib6pKpr59W27CFZf0Cx8"},
+  {title:"Skills Manager",download:"https://github.com/xingkongliang/skills-manager/releases",manual:"https://joyspace.jd.com/pages/aJhDRpIjBb1uNuCAgBDZ"},
+  {title:"LikeCode Nex",download:"https://likecodeni.jd.com/#/likecode-nex",manual:"https://joyspace.jd.com/pages/RPD6RxcIeKLbdkueyiY3"}
 ];
 
 /* ============================================================
@@ -234,9 +239,12 @@ var toggleEl = document.getElementById('newsToggle');
 newsListEl.innerHTML = NEWS.map(function(n,i){
   var hidden = i >= 3 ? ' n-hidden' : '';
   return '<a class="n-item'+hidden+'" href="'+esc(n.url)+'" target="_blank">' +
-         '<div class="n-meta"><span class="n-tag">'+esc(n.tag)+'</span></div>' +
-         '<div class="n-title">'+esc(n.title)+'</div>' +
-         '<div class="n-desc">'+esc(n.desc)+'</div></a>';
+         '<div class="n-main">' +
+           '<div class="n-title">'+esc(n.title)+'</div>' +
+           '<div class="n-desc">'+esc(n.desc)+'</div>' +
+         '</div>' +
+         '<span class="n-tag">'+esc(n.tag)+'</span>' +
+         '</a>';
 }).join('');
 if(NEWS.length<=3){ toggleEl.style.display='none'; }
 else{
@@ -321,7 +329,10 @@ document.getElementById('compList').innerHTML = COMPS.map(function(c){
 
 // ── AI 培训 ──
 document.getElementById('trainList').innerHTML = TRAININGS.map(function(t){
-  var liveLk = t.liveUrl ? '<a class="tl-lk" href="'+esc(t.liveUrl)+'" target="_blank">直播链接</a>' : '';
+  var isUrl = /^https?:\/\//i.test(t.liveUrl||'');
+  var liveLk = t.liveUrl ? (isUrl
+    ? '<a class="tl-lk" href="'+esc(t.liveUrl)+'" target="_blank">直播链接</a>'
+    : '<span class="tl-lk" style="cursor:default;border-color:#ddd;color:#666">📍 '+esc(t.liveUrl)+'</span>') : '';
   var docLk  = t.docUrl  ? '<a class="tl-lk alt" href="'+esc(t.docUrl)+'" target="_blank">培训文档</a>' : '';
   return '<div class="kb-card" style="cursor:default">' +
          '<div class="kb-ic">📖</div>' +
