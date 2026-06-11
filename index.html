@@ -182,12 +182,12 @@ header .dept{font-size:11px;margin-top:4px;opacity:.55;letter-spacing:.3px}
 
 // 1. 行业资讯（按数组顺序即优先级，从上到下，默认展示前 3 条）
 //    数据源：/Users/gulili6/Documents/个人/AI操作/部门平台数据源.xlsx → 「行业资讯」sheet
-//    维护方式：表格更新后，由维护人按列顺序（title / url）同步至下方数组
+//    维护方式：表格更新后，由维护人按列顺序（tag / title / desc / url）同步至下方数组
 var NEWS = [
-  {title:"金融AI智能体采购进入“爆发期”，苏州银行、宁波银行等机构已落地",url:"https://mp.weixin.qq.com/s/78MWo6XDCB6HD40sV4YqaA"},
-  {title:"跨境支付地址结构化进入倒计时！",url:"https://mp.weixin.qq.com/s/aE51K9k_Sg8IzKI6mvcgRw"},
-  {title:"知名跨境支付公司派安盈或将被收购",url:"https://mp.weixin.qq.com/s/MfXAroUgl0x6mBHuQYBf3w"},
-  {title:"【探秘AI眼镜】雷鸟V4携手京东推出反向定制众筹：38 克AI眼镜靠1:1大底传感器出圈",url:"https://mp.weixin.qq.com/s/gsPSIrq8MSO9O9wvvPh4Ow"}
+  {tag:"AI行业",title:"金融AI智能体采购进入“爆发期”，苏州银行、宁波银行等机构已落地",desc:"全行业都思考金融科技和信贷行业的出路时，消金界注意到新的业务方向正在快速发展",url:"https://mp.weixin.qq.com/s/78MWo6XDCB6HD40sV4YqaA"},
+  {tag:"支付行业",title:"跨境支付地址结构化进入倒计时！",desc:"跨境支付地址，不能再随便填了。",url:"https://mp.weixin.qq.com/s/aE51K9k_Sg8IzKI6mvcgRw"},
+  {tag:"竞争动态",title:"知名跨境支付公司派安盈或将被收购",desc:"6月9日晚间，跨境支付行业迎来重磅消息。",url:"https://mp.weixin.qq.com/s/MfXAroUgl0x6mBHuQYBf3w"},
+  {tag:"AI行业",title:"【探秘AI眼镜】雷鸟V4携手京东推出反向定制众筹：38 克AI眼镜靠1:1大底传感器出圈",desc:"TCL系黑马：雷鸟创新的硬核背景与实力",url:"https://mp.weixin.qq.com/s/gsPSIrq8MSO9O9wvvPh4Ow"}
 ];
 
 // 2. 重点待办（自动按 DDL 升序排列；过期项不显示。日期格式：YYYY-MM-DD 或文本如"每周五10:00"）
@@ -234,8 +234,9 @@ var toggleEl = document.getElementById('newsToggle');
 newsListEl.innerHTML = NEWS.map(function(n,i){
   var hidden = i >= 3 ? ' n-hidden' : '';
   return '<a class="n-item'+hidden+'" href="'+esc(n.url)+'" target="_blank">' +
-         '<div class="n-meta"><span class="n-tag">No.'+(i+1)+'</span></div>' +
-         '<div class="n-title">'+esc(n.title)+'</div></a>';
+         '<div class="n-meta"><span class="n-tag">'+esc(n.tag)+'</span></div>' +
+         '<div class="n-title">'+esc(n.title)+'</div>' +
+         '<div class="n-desc">'+esc(n.desc)+'</div></a>';
 }).join('');
 if(NEWS.length<=3){ toggleEl.style.display='none'; }
 else{
