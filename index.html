@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>应用产品部 开放平台</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;background:#f0f2f5;color:#333;min-height:100vh}
+a{color:inherit;text-decoration:none}
+
+/* ── Header ── */
+header{background:linear-gradient(135deg,#c81623 0%,#e4393c 50%,#ff5e5e 100%);color:#fff;padding:32px 0 28px;box-shadow:0 2px 16px rgba(228,57,60,.3);position:relative;overflow:hidden}
+header::after{content:'';position:absolute;top:-40%;right:-5%;width:45%;height:180%;background:radial-gradient(ellipse at center,rgba(255,255,255,.07) 0%,transparent 70%);pointer-events:none}
+.hd-in{max-width:1160px;margin:0 auto;padding:0 20px;position:relative}
+header h1{font-size:24px;font-weight:700;letter-spacing:1.5px}
+header .slogan{font-size:13px;margin-top:6px;opacity:.85;letter-spacing:.5px}
+header .dept{font-size:11px;margin-top:4px;opacity:.55;letter-spacing:.3px}
+
+/* ── Layout ── */
+.wrap{max-width:1160px;margin:0 auto;padding:20px}
+.sec{margin-bottom:20px;background:#fff;border-radius:12px;border:1px solid #e8e8e8;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.sec-hd{display:flex;align-items:center;gap:6px;padding:14px 20px;border-bottom:1px solid #f0f0f0;font-size:15px;font-weight:700;color:#222}
+.sec-hd .more{font-size:11px;font-weight:400;color:#e4393c;margin-left:auto;text-decoration:none;white-space:nowrap;cursor:pointer}
+.sec-hd .more:hover{text-decoration:underline}
+.sec-bd{padding:16px 20px}
+
+/* ── Top Row ── */
+.top-row{display:grid;grid-template-columns:6.5fr 3.5fr;gap:0}
+.top-left{padding:18px 20px;border-right:1px solid #f0f0f0}
+.top-right{padding:18px 20px}
+.col-hd{font-size:15px;font-weight:700;color:#222;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.col-hd .tip{font-size:11px;font-weight:400;color:#bbb;margin-left:auto;cursor:pointer;color:#e4393c}
+.col-hd .tip:hover{text-decoration:underline}
+
+/* News */
+.n-list{display:flex;flex-direction:column;gap:10px}
+.n-item{display:block;padding:12px 14px;border-radius:8px;border:1px solid #f0f0f0;color:inherit;background:#fafbfc;transition:all .2s}
+.n-item:hover{border-color:#e4393c;background:#fffafa}
+.n-meta{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.n-tag{font-size:11px;background:#fff0f0;color:#e4393c;padding:2px 8px;border-radius:10px;font-weight:600}
+.n-rank{font-size:11px;color:#999}
+.n-title{font-size:14px;font-weight:600;color:#222;margin-bottom:2px;line-height:1.5}
+.n-desc{font-size:12px;color:#666;line-height:1.6}
+.n-hidden{display:none}
+
+/* Todo */
+.t-list{display:flex;flex-direction:column;gap:12px}
+.t-item{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;background:#fafbfc;border-radius:8px;border:1px solid #f0f0f0}
+.t-bdg{font-size:11px;padding:3px 10px;border-radius:10px;font-weight:600;white-space:nowrap;flex-shrink:0;margin-top:3px}
+.t-bdg.urgent{background:#ffebee;color:#c62828}
+.t-bdg.zhong{background:#fff3e0;color:#e65100}
+.t-bdg.normal{background:#e8f5e9;color:#2e7d32}
+.t-body{flex:1;min-width:0}
+.t-tit{font-size:14px;font-weight:600;line-height:1.5;color:#222}
+.t-tit a{color:#222}
+.t-tit a:hover{color:#e4393c}
+.t-meta{font-size:12px;color:#666;margin-top:5px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.t-ddl{display:inline-block;background:#f5f5f5;color:#333;font-weight:600;padding:1px 8px;border-radius:4px;font-size:11px}
+.t-ddl.warn{background:#ffebee;color:#c62828}
+
+/* Competition Cards */
+.cm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.cm-card{background:#fff;border:1px solid #eee;border-radius:10px;overflow:hidden;transition:all .25s;display:block;color:inherit}
+.cm-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.07);border-color:#ddd;transform:translateY(-2px)}
+.cm-bar{height:4px;background:linear-gradient(90deg,#e4393c,#ff6b6b)}
+.cm-in{padding:16px}
+.cm-hd{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:8px}
+.cm-tit{font-size:14px;font-weight:700;line-height:1.4;flex:1;color:#222}
+.cm-bdg{font-size:10px;padding:2px 9px;border-radius:10px;font-weight:600;white-space:nowrap;flex-shrink:0}
+.cm-bdg.s{background:#fff3e0;color:#e65100}
+.cm-bdg.g{background:#e8f5e9;color:#2e7d32}
+.cm-bdg.e{background:#f5f5f5;color:#999}
+.cm-date{font-size:11px;color:#999;margin-bottom:8px}
+.cm-desc{font-size:12px;color:#666;line-height:1.6}
+
+/* Knowledge Base Cards */
+.kb-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.kb-card{background:#fafbfc;border-radius:10px;border:1px solid #eee;padding:16px;text-decoration:none;color:inherit;display:flex;flex-direction:column;gap:6px;transition:all .25s}
+.kb-card:hover{border-color:#e4393c;background:#fffafa;transform:translateY(-2px);box-shadow:0 4px 12px rgba(228,57,60,.06)}
+.kb-ic{font-size:22px}
+.kb-tit{font-size:13px;font-weight:700;color:#222}
+.kb-desc{font-size:11px;color:#888;line-height:1.6}
+
+/* Tools Cards */
+.tl-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.tl-card{background:#fff;border-radius:8px;border:1px solid #eee;padding:14px;transition:all .25s;display:flex;flex-direction:column;gap:8px}
+.tl-card:hover{border-color:#e4393c;box-shadow:0 2px 10px rgba(228,57,60,.08);transform:translateY(-2px)}
+.tl-hd{display:flex;align-items:center;gap:8px}
+.tl-ic{font-size:20px}
+.tl-tit{font-size:13px;font-weight:700;color:#222;flex:1}
+.tl-desc{font-size:11px;color:#888;line-height:1.55;min-height:32px}
+.tl-lks{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto}
+.tl-lk{font-size:11px;color:#e4393c;border:1px solid #e4393c;border-radius:5px;padding:3px 9px;transition:all .2s;font-weight:500}
+.tl-lk:hover{background:#e4393c;color:#fff}
+.tl-lk.alt{color:#666;border-color:#ddd}
+.tl-lk.alt:hover{background:#666;color:#fff;border-color:#666}
+
+/* Footer */
+.ftr{text-align:center;padding:18px;color:#bbb;font-size:11px;max-width:1160px;margin:0 auto 14px;background:#fff;border-radius:12px;border:1px solid #e8e8e8}
+
+/* Responsive */
+@media(max-width:900px){
+  .cm-grid{grid-template-columns:repeat(2,1fr)}
+  .tl-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:768px){
+  .top-row{grid-template-columns:1fr}
+  .top-left{border-right:none;border-bottom:1px solid #f0f0f0}
+  .cm-grid,.kb-grid{grid-template-columns:1fr}
+  .tl-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:480px){
+  .tl-grid{grid-template-columns:1fr}
+  header h1{font-size:20px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hd-in">
+    <h1>应用产品部 · 开放平台</h1>
+    <div class="slogan">信息同步 · 协同高效 · 共建共享</div>
+    <div class="dept">支付业务部 应用产品部</div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<!-- 行业资讯 + 重点待办 -->
+<div class="sec">
+  <div class="top-row">
+    <div class="top-left">
+      <div class="col-hd">
+        📰 行业资讯
+        <span class="tip" id="newsToggle">展开全部 ▾</span>
+      </div>
+      <div class="n-list" id="newsList"></div>
+    </div>
+    <div class="top-right">
+      <div class="col-hd">📋 重点待办</div>
+      <div class="t-list" id="todoList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- AI 比赛专区 -->
+<div class="sec">
+  <div class="sec-hd">🏆 AI 比赛专区</div>
+  <div class="sec-bd">
+    <div class="cm-grid" id="compList"></div>
+  </div>
+</div>
+
+<!-- AI 知识库 -->
+<div class="sec">
+  <div class="sec-hd">📚 AI 知识库</div>
+  <div class="sec-bd">
+    <div class="kb-grid" id="kbList"></div>
+  </div>
+</div>
+
+<!-- 工具集锦 -->
+<div class="sec">
+  <div class="sec-hd">🛠️ 工具集锦</div>
+  <div class="sec-bd">
+    <div class="tl-grid" id="toolList"></div>
+  </div>
+</div>
+
+</div>
+<div class="ftr" id="footer"></div>
+
+<script>
+/* ============================================================
+ *  数据区 —— 后续运营同事直接修改下面这些数组即可，无需改样式
+ * ============================================================ */
+
+// 1. 行业资讯（按数组顺序即优先级，从上到下，默认展示前 3 条）
+//    数据源：/Users/gulili6/Documents/个人/AI操作/部门平台数据源.xlsx → 「行业资讯」sheet
+//    维护方式：表格更新后，由维护人按列顺序（title / url）同步至下方数组
+var NEWS = [
+  {title:"金融AI智能体采购进入“爆发期”，苏州银行、宁波银行等机构已落地",url:"https://mp.weixin.qq.com/s/78MWo6XDCB6HD40sV4YqaA"},
+  {title:"跨境支付地址结构化进入倒计时！",url:"https://mp.weixin.qq.com/s/aE51K9k_Sg8IzKI6mvcgRw"},
+  {title:"知名跨境支付公司派安盈或将被收购",url:"https://mp.weixin.qq.com/s/MfXAroUgl0x6mBHuQYBf3w"},
+  {title:"【探秘AI眼镜】雷鸟V4携手京东推出反向定制众筹：38 克AI眼镜靠1:1大底传感器出圈",url:"https://mp.weixin.qq.com/s/gsPSIrq8MSO9O9wvvPh4Ow"}
+];
+
+// 2. 重点待办（自动按 DDL 升序排列；过期项不显示。日期格式：YYYY-MM-DD）
+var TODOS = [
+  {title:"支付产品部产品及重点项目周同步",ddl:"2026-06-12",url:"https://joyspace.jd.com/sheets/B56cENZT8ExbIDdQ9jiY"},
+  {title:"【金科微创新】项目登记",ddl:"2026-06-14",url:"https://joyspace.jd.com/sheets/mkZFSFWklEe2124I9NmJ"},
+  {title:"5 月必赢之战季度更新",ddl:"2026-06-20",url:"https://joyspace.jd.com/sheets/7c1aZyhH5rRwBAA1a2Vg"},
+  {title:"季度 OKR 复盘材料提交",ddl:"2026-06-30",url:"https://joyspace.jd.com/"}
+];
+
+// 3. AI 比赛专区
+var COMPS = [
+  {title:"【玩转AI】支付AI应用大赛",date:"2026/05/28 ~ 2026/06/26",desc:"以赛选人、以赛促用，沉淀可复用、可推广的 AI 实践成果。",url:"https://joyspace.jd.com/pages/7JzQ6ohK3N9CJUMD0jSe",status:"报名中"},
+  {title:"京东科技创新火花 · AI 赋能大赛",date:"长期赛事",desc:"通过 AI 赋能大赛形式，沉淀 AI 实践成果。",url:"https://joyspace.jd.com/",status:"报名中"},
+  {title:"JoyAI Vibe Coding 创意大赛",date:"2026 全年",desc:"以 AI 编程为主题，鼓励开发者创意碰撞。",url:"https://joyspace.jd.com/",status:"进行中"}
+];
+
+// 4. AI 知识库
+var KBS = [
+  {ic:"📦",title:"基础产品部 AI 项目合集",desc:"各团队 AI 落地成果与项目进展汇总。",url:"https://joyspace.jd.com/"},
+  {ic:"📖",title:"AI 案例库",desc:"AI 工具入门、运营提效实践、案例汇总。",url:"https://joyspace.jd.com/"},
+  {ic:"📊",title:"AI 工具实践手册",desc:"AI 编码、数据分析、自动化方法与案例。",url:"https://joyspace.jd.com/"}
+];
+
+// 5. 工具集锦
+var TOOLS = [
+  {ic:"⚡",title:"ZERO 平台",desc:"内部 AI 工作平台，统一管理智能体和工作流。",download:"https://joyspace.jd.com/",manual:"https://joyspace.jd.com/pages/ib6pKpr59W27CFZf0Cx8"},
+  {ic:"🤖",title:"JoyClaw",desc:"自动化执行助手，可批量处理网页任务。",download:"https://joyspace.jd.com/",manual:"https://joyspace.jd.com/"},
+  {ic:"💻",title:"JoyCode",desc:"AI 辅助编码工具，支持多种 IDE 集成。",download:"https://joyspace.jd.com/",manual:"https://joyspace.jd.com/"},
+  {ic:"📝",title:"慧记",desc:"AI 会议记录，自动生成纪要与待办。",download:"https://joyspace.jd.com/",manual:"https://joyspace.jd.com/"},
+  {ic:"🎨",title:"京点点",desc:"AI 视频/图像生成工具。",download:"https://joyspace.jd.com/",manual:"https://joyspace.jd.com/"},
+  {ic:"🔍",title:"小叮当",desc:"人群特征分析与数据查询助手。",download:"https://joyspace.jd.com/",manual:"https://joyspace.jd.com/"},
+  {ic:"📊",title:"CDP 查询助手",desc:"客户数据平台快速查询工具。",download:"https://joyspace.jd.com/",manual:"https://joyspace.jd.com/"},
+  {ic:"🚀",title:"JoyAgent",desc:"商务拜访、客户管理智能体。",download:"https://joyspace.jd.com/",manual:"https://joyspace.jd.com/"}
+];
+
+/* ============================================================
+ *  渲染逻辑（一般无需修改）
+ * ============================================================ */
+(function(){
+
+function esc(s){ if(s==null)return ''; var x=document.createElement('span'); x.textContent=s; return x.innerHTML; }
+function pad(n){return n<10?'0'+n:''+n;}
+
+var now = new Date();
+var todayNum = now.getFullYear()*10000 + (now.getMonth()+1)*100 + now.getDate();
+document.getElementById('footer').textContent = '应用产品部开放平台 © ' + now.getFullYear() + ' · 内容由部门联合维护';
+
+// ── 行业资讯 ──
+var newsListEl = document.getElementById('newsList');
+var toggleEl = document.getElementById('newsToggle');
+newsListEl.innerHTML = NEWS.map(function(n,i){
+  var hidden = i >= 3 ? ' n-hidden' : '';
+  return '<a class="n-item'+hidden+'" href="'+esc(n.url)+'" target="_blank">' +
+         '<div class="n-meta"><span class="n-tag">No.'+(i+1)+'</span></div>' +
+         '<div class="n-title">'+esc(n.title)+'</div></a>';
+}).join('');
+if(NEWS.length<=3){ toggleEl.style.display='none'; }
+else{
+  var expanded = false;
+  toggleEl.addEventListener('click', function(){
+    expanded = !expanded;
+    var hides = newsListEl.querySelectorAll('.n-item');
+    hides.forEach(function(el,i){
+      if(i>=3) el.classList.toggle('n-hidden', !expanded);
+    });
+    toggleEl.textContent = expanded ? '收起 ▴' : '展开全部 ▾';
+  });
+}
+
+// ── 重点待办（DDL 升序，过期不显示）──
+var todoData = TODOS.map(function(t){
+    var p = (t.ddl||'').split('-');
+    return Object.assign({},t,{ddlNum: p.length===3 ? (+p[0])*10000 + (+p[1])*100 + (+p[2]) : 99999999});
+  })
+  .filter(function(t){ return t.ddlNum >= todayNum; })
+  .sort(function(a,b){ return a.ddlNum - b.ddlNum; });
+
+document.getElementById('todoList').innerHTML = todoData.length ? todoData.map(function(t){
+  var diff = Math.floor((Date.UTC(+t.ddl.split('-')[0],+t.ddl.split('-')[1]-1,+t.ddl.split('-')[2]) - Date.UTC(now.getFullYear(),now.getMonth(),now.getDate()))/86400000);
+  var cls,label,ddlCls;
+  if(diff<=2){ cls='urgent'; label='紧急'; ddlCls='warn'; }
+  else if(diff<=7){ cls='zhong'; label='进行中'; ddlCls=''; }
+  else { cls='normal'; label='常规'; ddlCls=''; }
+  var diffTxt = diff===0 ? '今天' : (diff===1 ? '明天' : '剩'+diff+'天');
+  return '<div class="t-item">' +
+         '<span class="t-bdg '+cls+'">'+label+'</span>' +
+         '<div class="t-body">' +
+           '<div class="t-tit"><a href="'+esc(t.url)+'" target="_blank">'+esc(t.title)+'</a></div>' +
+           '<div class="t-meta"><span class="t-ddl '+ddlCls+'">⏰ '+esc(t.ddl)+'（'+diffTxt+'）</span></div>' +
+         '</div></div>';
+}).join('') : '<div style="font-size:13px;color:#bbb;text-align:center;padding:16px 0">暂无待办 ✨</div>';
+
+// ── AI 比赛专区 ──
+document.getElementById('compList').innerHTML = COMPS.map(function(c){
+  var cls = c.status==='报名中' ? 's' : (c.status==='进行中' ? 'g' : 'e');
+  return '<a class="cm-card" href="'+esc(c.url)+'" target="_blank">' +
+         '<div class="cm-bar"></div>' +
+         '<div class="cm-in">' +
+           '<div class="cm-hd"><div class="cm-tit">'+esc(c.title)+'</div><span class="cm-bdg '+cls+'">'+esc(c.status)+'</span></div>' +
+           '<div class="cm-date">📅 '+esc(c.date)+'</div>' +
+           '<div class="cm-desc">'+esc(c.desc)+'</div>' +
+         '</div></a>';
+}).join('');
+
+// ── AI 知识库 ──
+document.getElementById('kbList').innerHTML = KBS.map(function(k){
+  return '<a class="kb-card" href="'+esc(k.url)+'" target="_blank">' +
+         '<div class="kb-ic">'+k.ic+'</div>' +
+         '<div class="kb-tit">'+esc(k.title)+'</div>' +
+         '<div class="kb-desc">'+esc(k.desc)+'</div></a>';
+}).join('');
+
+// ── 工具集锦 ──
+document.getElementById('toolList').innerHTML = TOOLS.map(function(t){
+  var dl = t.download ? '<a class="tl-lk" href="'+esc(t.download)+'" target="_blank">下载</a>' : '';
+  var mn = t.manual ? '<a class="tl-lk alt" href="'+esc(t.manual)+'" target="_blank">使用手册</a>' : '';
+  return '<div class="tl-card">' +
+         '<div class="tl-hd"><div class="tl-ic">'+t.ic+'</div><div class="tl-tit">'+esc(t.title)+'</div></div>' +
+         '<div class="tl-desc">'+esc(t.desc)+'</div>' +
+         '<div class="tl-lks">'+dl+mn+'</div>' +
+         '</div>';
+}).join('');
+
+})();
+</script>
+</body>
+</html>
